@@ -1,9 +1,9 @@
-function validMove(row,colm){
-    switch(board[row][colm]){
-        case 1 || 7:
-            if (pawnmoves()[row][colm] == 1) return true
+var validMoves = [];
 
-    }
+function validMove(row,colm){
+    if(validMoves[row][colm] == 1) return true;
+    validMoves = [];
+    return false;
 }
 
 function pawnmoves(row,colm){

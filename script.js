@@ -59,25 +59,39 @@ function move(from, to, pcc){
     whitesTurn = !whitesTurn;
 }
 
+function cancelMove(){
+    let color = 'white';
+    if((from[0] + from[1]) % 2== 0)
+        color = 'brown';
+    document.getElementById(currentPeice[0]*8+currentPeice[1]).style.backgroundColor = color;
+
+    currentPeice = null;
+}
+
 function onClickEvt(id){
     let row = Math.floor(parseInt(id)/8);
     let colm = parseInt(id)%8;
 
 
-    if(currentPeice !== null && validMove(row,colm)){
-        move([currentPeice[1],currentPeice[2]], [row,colm], currentPeice[0]);
-        currentPeice = null;
+    if(currentPeice !== null){
+        if(validMove(row,colm)){
+            move([currentPeice[1],currentPeice[2]], [row,colm], currentPeice[0]);
+            currentPeice = null;
+            return;
+        }
+        cancelMove();
         return;
     }
 
-    if(board[row][colm] != 0 && rightColor(row,colm)){
+    if(rightColor(row,colm)){
         currentPeice = [board[row][colm],row,colm];
         document.getElementById(row*8+colm).style.backgroundColor = "yellow";
-        calculateValidMoves();
+        //calculateValidMoves();
     }
 }
 
 function rightColor(row,colm){
+    if(board[row][colm] == 0) return false;
     if(whitesTurn && board[row][colm] <= 6) return true;
     if(!whitesTurn && board[row][colm] > 6) return true;
     return false;
