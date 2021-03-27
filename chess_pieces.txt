@@ -1,0 +1,8 @@
+pawn - 1
+bisiop - 2
+knight - 3
+rook - 4
+queen - 5
+king - 6
+
+black is + 6
