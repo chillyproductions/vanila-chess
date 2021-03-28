@@ -1,12 +1,12 @@
 var board = [
-    [10,9,8,11,12,8,9,10],
-    [7,7,7,7,7,7,7,7],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [1,1,1,1,1,1,1,1],
-    [4,3,2,5,6,2,3,4]
+    [new rook(0,0,"B"),null,null,null,null,null,null,new rook(0,7,"B")],
+    [new pawn(1,0,"B"),new pawn(1,1,"B"),new pawn(1,2,"B"),new pawn(1,3,"B"),new pawn(1,4,"B"),new pawn(1,5,"B"),new pawn(1,6,"B"),new pawn(1,7,"B")],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    [null,null,null,null,null,null,null,null],
+    [null,null,new pawn(5,2,"B"),null,null,null,null,null],
+    [new pawn(6,0,"W"),new pawn(6,1,"W"),new pawn(6,2,"W"),new pawn(6,3,"W"),new pawn(6,4,"W"),new pawn(6,5,"W"),new pawn(6,6,"W"),new pawn(6,7,"W")],
+    [new rook(7,0,"W"),null,null,null,null,null,null,new rook(7,7,"W")],
 ];
 
 var img_array = [null, "./imgs/white_pawn.png",
@@ -22,7 +22,7 @@ var img_array = [null, "./imgs/white_pawn.png",
   "./imgs/black_queen.png",
   "./imgs/black_king.png"];
 
-var currentPeice = null;
+var currentPiece = null;
 var whitesTurn = true;
 
 function create_board(){
@@ -34,7 +34,7 @@ function create_board(){
             if((row + colm) % 2== 0)
                 color = 'brown';
 
-            s+="<td onclick='onClickEvt(this.id);' style='width:60px; height:60px; background-color:"+color+"; background-image:url("+img_array[board[row][colm]]+")' id='"+ (row*8+colm) +"'>";
+            s+="<td onclick='onClickEvt(this.id);' style='width:60px; height:60px; background-color:"+color+"; background-image:url("+board[row][colm]?.img+")' id='"+ (row*8+colm) +"'>";
             s+="</td>";
         }
         s+="</tr>";
@@ -44,59 +44,31 @@ function create_board(){
     document.getElementById("board").innerHTML = s;
 }
 
-function move(from, to, pcc){
-    board[from[0]][from[1]] = 0;
-    board[to[0]][to[1]] = pcc;
-    document.getElementById(from[0]*8+from[1]).style.backgroundImage = null;
-
-    let color = 'white';
-    if((from[0] + from[1]) % 2== 0)
-        color = 'brown';
-    document.getElementById(from[0]*8+from[1]).style.backgroundColor = color;
-
-    document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+img_array[pcc]+")";
-
-    whitesTurn = !whitesTurn;
-}
-
-function cancelMove(){
-    let color = 'white';
-    if((from[0] + from[1]) % 2== 0)
-        color = 'brown';
-    document.getElementById(currentPeice[0]*8+currentPeice[1]).style.backgroundColor = color;
-
-    currentPeice = null;
-}
-
 function onClickEvt(id){
     let row = Math.floor(parseInt(id)/8);
     let colm = parseInt(id)%8;
 
 
-    if(currentPeice !== null){
-        if(validMove(row,colm)){
-            move([currentPeice[1],currentPeice[2]], [row,colm], currentPeice[0]);
-            currentPeice = null;
+    if(currentPiece){    
+        if(currentPiece.validMoves().includes(row*8+colm)){
+            currentPiece.move([row,colm]);
+            currentPiece = null;
             return;
         }
-        cancelMove();
+        currentPiece.cancelMove();
         return;
     }
 
     if(rightColor(row,colm)){
-        currentPeice = [board[row][colm],row,colm];
+        currentPiece = board[row][colm];
         document.getElementById(row*8+colm).style.backgroundColor = "yellow";
-        //calculateValidMoves();
     }
 }
 
 function rightColor(row,colm){
-    if(board[row][colm] == 0) return false;
-    if(whitesTurn && board[row][colm] <= 6) return true;
-    if(!whitesTurn && board[row][colm] > 6) return true;
+    if(whitesTurn && board[row][colm]?.color == "W") return true;
+    if(!whitesTurn && board[row][colm]?.color == "B") return true;
     return false;
 }
-
-
 
 create_board();
