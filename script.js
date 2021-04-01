@@ -8,6 +8,7 @@ var board = [
     [new pawn(6,0,"W"),new pawn(6,1,"W"),new pawn(6,2,"W"),new pawn(6,3,"W"),new pawn(6,4,"W"),new pawn(6,5,"W"),new pawn(6,6,"W"),new pawn(6,7,"W")],
     [new rook(7,0,"W"),new knight(7,1,"W"),new bisiop(7,2,"W"),new queen(7,3,"W"),new king(7,4,"W"),new bisiop(7,5,"W"),new knight(7,6,"W"),new rook(7,7,"W")],
 ];
+var testBoard = [];
 
 var img_array = [null, "./imgs/white_pawn.png",
  "./imgs/white_bisiop.png",
@@ -25,14 +26,16 @@ var img_array = [null, "./imgs/white_pawn.png",
 var currentPiece = null;
 var whitesTurn = true;
 var moves = [];
-var whiteKing = board[0][4];
-var blackKing = board[7][4];
+var blackKing = [board[0][4],0,4];
+var whiteKing = [board[7][4],7,4];
 
 function create_board(){
     let s = "<table border='1'>";
     for(let row = 0; row < 8; row++){
+        testBoard[row] = [];
         s+="<tr>";
         for(let colm = 0; colm < 8; colm++){
+            testBoard[row][colm] = board[row][colm];
             let color = 'white';
             if((row + colm) % 2== 0)
                 color = 'brown';
@@ -53,9 +56,12 @@ function onClickEvt(id){
 
 
     if(currentPiece){    
-        if(currentPiece.validMoves().includes(row*8+colm)){
+        if(moves.includes(row*8+colm)){
             currentPiece.move([row,colm]);
             currentPiece = null;
+            
+            printGameStatus();
+            console.log(boardValue());
             return;
         }
         currentPiece.cancelMove();
@@ -74,6 +80,24 @@ function rightColor(row,colm){
     if(whitesTurn && board[row][colm]?.color == "W") return true;
     if(!whitesTurn && board[row][colm]?.color == "B") return true;
     return false;
+}
+
+function printGameStatus(){
+    if(check("B")){
+        if(mate("W")){
+            alert("White in mate");
+            return;
+        }
+        alert("white in check");
+    }
+
+    if(check("W")){
+        if(mate("B")){
+            alert("black in mate");
+            return;
+        }
+        alert("black in check");
+    }
 }
 
 create_board();
