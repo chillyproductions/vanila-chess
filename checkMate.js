@@ -202,13 +202,15 @@ function check(color){
 }
 
 function cleanChecks(from,moves,color){
-    
     for(let i = 0; i < moves.length; i++){
         let row = Math.floor(moves[i]/8);
         let colm = moves[i]%8;
 
         let movesTested = tryMove(from,[row,colm],[]);
-        if(check(color,testBoard)) {moves.splice(i,1); i--;}
+        if(check(color)) {
+            moves.splice(i,1);
+            i--;
+        }
         backUp(movesTested);
     }
     return moves

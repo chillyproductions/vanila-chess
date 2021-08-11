@@ -19,6 +19,7 @@ class piece{
         let color = 'white';
         if((this.row + this.colm) % 2== 0)
             color = 'brown';
+            
         document.getElementById(this.row*8+this.colm).style.backgroundColor = color;
         this.clearMoves();
     
@@ -48,8 +49,8 @@ class piece{
             if((moveRow + moveColm) % 2== 0)
                 color = 'brown';
             document.getElementById(move).style.backgroundColor = color;
-            moves = [];
         }
+        moves = [];
     }
 
     showMoves(){
@@ -241,6 +242,7 @@ class bisiop extends piece{
 }
 
 class rook extends piece{
+    moved = false;
     constructor(row,colm,color){
         super(row,colm,color);
         if(color == "W")
@@ -248,7 +250,10 @@ class rook extends piece{
         else 
             this.img = './imgs/black_rook.png';
     }
-
+    move(to){
+        super.move(to);
+        this.moved = true;
+    }
     validMoves(){
         let moves = [];
         for(let irow = this.row -1; irow >= 0; irow--){
@@ -337,6 +342,7 @@ class queen extends bisiop{
 }
 
 class king extends piece{
+    moved = false;
     constructor(row,colm,color){
         super(row,colm,color);
         if(color == "W"){
@@ -346,7 +352,18 @@ class king extends piece{
             this.img = './imgs/black_king.png';
     }
     move(to){
+        //castling
+        // if(to[1] == 6){
+        //     board[to[0]][7].move([to[0],5]);
+        //     whitesTurn = !whitesTurn;
+        // }
+        // else if(to[1] == 2){
+        //     board[to[0]][0].move([to[0],3]);
+        //     whitesTurn = !whitesTurn;
+        // }
+
         super.move(to);
+
         if(this.color == "W"){
             whiteKing[1] = this.row;
             whiteKing[2] = this.colm;
@@ -355,6 +372,7 @@ class king extends piece{
             blackKing[1] = this.row;
             blackKing[2] = this.colm;
         }
+        this.moved = true;
     }
     validMoves(){
         let moves = [];
@@ -384,6 +402,18 @@ class king extends piece{
             moves.push(this.row*8+this.colm-1);
         }
         
+        //casteling
+        // if(testBoard?.[this.row][this.colm-4] instanceof rook && testBoard?.[this.row][this.colm-4]?.color == this.color){
+        //     if(this.moved == false && testBoard[this.row][this.colm-4].moved == false && !check(this.enemyColor))
+        //         if(!testBoard[this.row][this.colm-3] && !testBoard[this.row][this.colm-2] && !testBoard[this.row][this.colm-1])
+        //             moves.push(this.row*8+this.colm-2);
+        // }
+        // if(testBoard?.[this.row][this.colm+3] instanceof rook && testBoard?.[this.row][this.colm+3]?.color == this.color){
+        //     if(this.moved == false && testBoard[this.row][this.colm+3].moved == false && !check(this.enemyColor))
+        //         if(!testBoard[this.row][this.colm+2] && !testBoard[this.row][this.colm+1])
+        //             moves.push(this.row*8+this.colm+2);
+        // }
+
         return cleanChecks([this.row,this.colm],moves,this.enemyColor);
     }
 }

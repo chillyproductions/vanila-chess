@@ -10,19 +10,6 @@ var board = [
 ];
 var testBoard = [];
 
-var img_array = [null, "./imgs/white_pawn.png",
- "./imgs/white_bisiop.png",
-  "./imgs/white_knight.png",
-  "./imgs/white_rook.png",
-  "./imgs/white_queen.png",
-  "./imgs/white_king.png",
-  "./imgs/black_pawn.png",
-  "./imgs/black_bisiop.png",
-  "./imgs/black_knight.png",
-  "./imgs/black_rook.png",
-  "./imgs/black_queen.png",
-  "./imgs/black_king.png"];
-
 var currentPiece = null;
 var whitesTurn = true;
 var moves = [];
