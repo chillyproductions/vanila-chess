@@ -49,15 +49,24 @@ function findMove(black,depth){
             }
         }
     }
-    if(!bestMove && black)
-        return {value: -10000}
-    else if(!bestMove && !black)
-        return {value: 10000}
+    if(!bestMove && black){
+        if(check('B'))
+            return {value: -10000}
+        else
+            return {value: 0}
+    }
+    if(!bestMove && !black){
+        if(check('W'))
+            return {value: 10000}
+        else
+            return {value: 0}
+    }
         
     return bestMove;
 }
 
 function AImove(){
+    printGameStatus();
     let bestMove = findMove(true,2);
     bestMove.piece.move(bestMove.move);
 }

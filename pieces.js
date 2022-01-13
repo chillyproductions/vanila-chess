@@ -9,25 +9,30 @@ class piece{
             this.enemyColor = "B"
     }
 
-    move(to){
-        board[to[0]][to[1]] = board[this.row][this.colm];
+    move(to, test){
+        if(!test)
+            board[to[0]][to[1]] = board[this.row][this.colm];
         testBoard[to[0]][to[1]] = board[this.row][this.colm];
-        board[this.row][this.colm] = null;
+        if(!test)
+            board[this.row][this.colm] = null;
         testBoard[this.row][this.colm] = null;
-        document.getElementById(this.row*8+this.colm).style.backgroundImage = null;
-    
-        let color = 'white';
-        if((this.row + this.colm) % 2== 0)
-            color = 'brown';
+        
+        if(!test){
+            document.getElementById(this.row*8+this.colm).style.backgroundImage = null;
+        
+            let color = 'white';
+            if((this.row + this.colm) % 2== 0)
+                color = 'brown';
+                
+            document.getElementById(this.row*8+this.colm).style.backgroundColor = color;
+            this.clearMoves();
+        
+            document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+this.img+")";
             
-        document.getElementById(this.row*8+this.colm).style.backgroundColor = color;
-        this.clearMoves();
-    
-        document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+this.img+")";
-    
+            whitesTurn = !whitesTurn;
+        }
         this.row = to[0];
         this.colm = to[1];
-        whitesTurn = !whitesTurn;
     }
 
     cancelMove(){
@@ -67,42 +72,48 @@ class pawn extends piece{
         else 
             this.img = './imgs/black_pawn.png';
     }
-    move(to){
+    move(to,test){
         let upgrade;
         if(this.color == "W" && to[0] == 0){
             upgrade = new queen(to[0],to[1],"W")
-            board[to[0]][to[1]] = upgrade;
+            if(!test)
+                board[to[0]][to[1]] = upgrade;
             testBoard[to[0]][to[1]] = upgrade;
         }
         else if(this.color == "B" && to[0] == 7){
             upgrade = new queen(to[0],to[1],"B")
-            board[to[0]][to[1]] = upgrade;
+            if(!test)
+                board[to[0]][to[1]] = upgrade;
             testBoard[to[0]][to[1]] = upgrade;
         }
         else{
-            board[to[0]][to[1]] = board[this.row][this.colm];
+            if(!test)
+                board[to[0]][to[1]] = board[this.row][this.colm];
             testBoard[to[0]][to[1]] = board[this.row][this.colm];
         }
-
-        board[this.row][this.colm] = null;
+        if(!test)
+            board[this.row][this.colm] = null;
         testBoard[this.row][this.colm] = null;
-        document.getElementById(this.row*8+this.colm).style.backgroundImage = null;
+        
+        if(!test){
+            document.getElementById(this.row*8+this.colm).style.backgroundImage = null;
     
-        let color = 'white';
-        if((this.row + this.colm) % 2== 0)
-            color = 'brown';
-        document.getElementById(this.row*8+this.colm).style.backgroundColor = color;
-        this.clearMoves();
-    
-        if(upgrade)
-            document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+upgrade.img+")";
-        else
-            document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+this.img+")";
-
-
+            let color = 'white';
+            if((this.row + this.colm) % 2== 0)
+                color = 'brown';
+            document.getElementById(this.row*8+this.colm).style.backgroundColor = color;
+            this.clearMoves();
+        
+            
+            if(upgrade)
+                document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+upgrade.img+")";
+            else
+                document.getElementById(to[0]*8+to[1]).style.backgroundImage = "url("+this.img+")";
+            whitesTurn = !whitesTurn;
+        }
         this.row = to[0];
         this.colm = to[1];
-        whitesTurn = !whitesTurn;
+        
     }
 
     validMoves(){
@@ -250,8 +261,8 @@ class rook extends piece{
         else 
             this.img = './imgs/black_rook.png';
     }
-    move(to){
-        super.move(to);
+    move(to,test){
+        super.move(to,test);
         this.moved = true;
     }
     validMoves(){
@@ -351,7 +362,7 @@ class king extends piece{
         else
             this.img = './imgs/black_king.png';
     }
-    move(to){
+    move(to,test){
         //castling
         // if(to[1] == 6){
         //     board[to[0]][7].move([to[0],5]);
@@ -362,16 +373,7 @@ class king extends piece{
         //     whitesTurn = !whitesTurn;
         // }
 
-        super.move(to);
-
-        if(this.color == "W"){
-            whiteKing[1] = this.row;
-            whiteKing[2] = this.colm;
-        }
-        else{
-            blackKing[1] = this.row;
-            blackKing[2] = this.colm;
-        }
+        super.move(to,test);
         this.moved = true;
     }
     validMoves(){

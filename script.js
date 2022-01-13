@@ -1,20 +1,20 @@
 var board = [
-    [new rook(0,0,"B"),new knight(0,1,"B"),new bisiop(0,2,"B"),new queen(0,3,"B"),new king(0,4,"B"),new bisiop(0,5,"B"),new knight(0,6,"B"),new rook(0,7,"B")],
+    [new rook(0,0,"B"),new knight(0,1,"B"),new bisiop(0,2,"B"),new king(0,3,"B"),new queen(0,4,"B"),new bisiop(0,5,"B"),new knight(0,6,"B"),new rook(0,7,"B")],
     [new pawn(1,0,"B"),new pawn(1,1,"B"),new pawn(1,2,"B"),new pawn(1,3,"B"),new pawn(1,4,"B"),new pawn(1,5,"B"),new pawn(1,6,"B"),new pawn(1,7,"B")],
     [null,null,null,null,null,null,null,null],
     [null,null,null,null,null,null,null,null],
     [null,null,null,null,null,null,null,null],
     [null,null,null,null,null,null,null,null],
     [new pawn(6,0,"W"),new pawn(6,1,"W"),new pawn(6,2,"W"),new pawn(6,3,"W"),new pawn(6,4,"W"),new pawn(6,5,"W"),new pawn(6,6,"W"),new pawn(6,7,"W")],
-    [new rook(7,0,"W"),new knight(7,1,"W"),new bisiop(7,2,"W"),new queen(7,3,"W"),new king(7,4,"W"),new bisiop(7,5,"W"),new knight(7,6,"W"),new rook(7,7,"W")],
+    [new rook(7,0,"W"),new knight(7,1,"W"),new bisiop(7,2,"W"),new king(7,3,"W"),new queen(7,4,"W"),new bisiop(7,5,"W"),new knight(7,6,"W"),new rook(7,7,"W")],
 ];
 var testBoard = [];
 
 var currentPiece = null;
 var whitesTurn = true;
 var moves = [];
-var blackKing = [board[0][4],0,4];
-var whiteKing = [board[7][4],7,4];
+var blackKing = board[0][3];
+var whiteKing = board[7][3];
 
 function create_board(){
     let s = "<table border='1'>";

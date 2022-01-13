@@ -1,9 +1,9 @@
 function check(color){
-    let row = whiteKing[1];
-    let colm = whiteKing[2];
+    let row = whiteKing.row;
+    let colm = whiteKing.colm;
     if(color == "W"){
-        row = blackKing[1];
-        colm = blackKing[2];
+        row = blackKing.row;
+        colm = blackKing.colm;
     }
 
     let checkAmount = 0;
@@ -217,44 +217,49 @@ function cleanChecks(from,moves,color){
 }
 
 function tryMove(from,to,movesTested){
-    if(testBoard[from[0]][from[1]] instanceof king){
-        if(testBoard[from[0]][from[1]].color == "W"){
-            whiteKing[1] = to[0];
-            whiteKing[2] = to[1];
-        }
-        else{
-            blackKing[1] = to[0];
-            blackKing[2] = to[1];
-        }
-    }
+    movesTested.push([...from,testBoard[from[0]][from[1]]]);
+    movesTested.push([...to,testBoard[to[0]][to[1]]]);
 
-    if(testBoard[from[0]][from[1]] instanceof pawn){
-        if(testBoard[from[0]][from[1]].color == "W" && to[0] == 0)
-            testBoard[to[0]][to[1]] = new queen(to[0],to[1],"W")
-        else if(testBoard[from[0]][from[1]].color == "B" && to[0] == 7)
-            testBoard[to[0]][to[1]] = new queen(to[0],to[1],"B");
-        else
-            testBoard[to[0]][to[1]] = testBoard[from[0]][from[1]];
-    }
-    else
-        testBoard[to[0]][to[1]] = testBoard[from[0]][from[1]];
-    testBoard[from[0]][from[1]] = null;
+    if(!testBoard[from[0]][from[1]])
+        console.log(from);
+    testBoard[from[0]][from[1]].move(to,true);
+    // if(testBoard[from[0]][from[1]] instanceof king){
+    //     if(testBoard[from[0]][from[1]].color == "W"){
+    //         whiteKing[1] = to[0];
+    //         whiteKing[2] = to[1];
+    //     }
+    //     else{
+    //         blackKing[1] = to[0];
+    //         blackKing[2] = to[1];
+    //     }
+    // }
+
+    // if(testBoard[from[0]][from[1]] instanceof pawn){
+    //     if(testBoard[from[0]][from[1]].color == "W" && to[0] == 0)
+    //         testBoard[to[0]][to[1]] = new queen(to[0],to[1],"W")
+    //     else if(testBoard[from[0]][from[1]].color == "B" && to[0] == 7)
+    //         testBoard[to[0]][to[1]] = new queen(to[0],to[1],"B");
+    //     else
+    //         testBoard[to[0]][to[1]] = testBoard[from[0]][from[1]];
+    // }
+    // else
+    //     testBoard[to[0]][to[1]] = testBoard[from[0]][from[1]];
+    // testBoard[from[0]][from[1]] = null;
 
 
-    if(!movesTested.length)
-        movesTested.push(from);
-    movesTested.push(to);
+
     return movesTested;
 }
 
 function backUp(movesTested){
-    for(move of movesTested){
-        testBoard[move[0]][move[1]] = board[move[0]][move[1]];
+    for(let i = movesTested.length-1; i >= 0 ;i--){
+        let move = movesTested[i];
+        testBoard[move[0]][move[1]] = move[2];
+        if (testBoard[move[0]][move[1]]){
+            testBoard[move[0]][move[1]].row = move[0];
+            testBoard[move[0]][move[1]].colm = move[1];
+        }
     }
-    whiteKing[1] = whiteKing[0].row;
-    whiteKing[2] = whiteKing[0].colm;
-    blackKing[1] = blackKing[0].row;
-    blackKing[2] = blackKing[0].colm;
 }
 
 function mate(color){
